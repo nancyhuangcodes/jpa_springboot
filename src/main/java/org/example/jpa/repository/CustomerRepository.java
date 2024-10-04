@@ -1,0 +1,17 @@
+package org.example.jpa.repository;
+
+
+import org.example.jpa.model.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    // Data Persistence: CrudRepository (Basic), JpaRepository (Advanced, extends from CrudRepository)
+    // save()           -- save() method is also equivalent to performing an update
+    // findOne()
+    // findById()
+    // findByEmail()
+    // findAll()
+    // count()
+    // delete()
+    // deleteById()
+}
