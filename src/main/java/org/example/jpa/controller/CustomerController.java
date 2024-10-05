@@ -1,5 +1,7 @@
 package org.example.jpa.controller;
 
+import jakarta.validation.Valid;
+import org.example.jpa.exception.ResourceNotFoundException;
 import org.example.jpa.model.Customer;
 import org.example.jpa.repository.CustomerRepository;
 import org.example.jpa.service.CustomerService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,16 +25,22 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<Object> allCustomers(){
-        return new  ResponseEntity<> (customerService.findAll(), HttpStatus.OK);
+
+        List<Customer> customerList = customerService.findAll();
+
+        if(customerList.isEmpty()) throw new ResourceNotFoundException();
+
+        return new  ResponseEntity<> (customerList, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveCustomer(@RequestBody Customer customer){
+    public ResponseEntity<Object> saveCustomer(@RequestBody @Valid Customer customer){
+
         return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
     }
 
-    @PutMapping("clear/{id}")
-    public ResponseEntity<Object> updateCustomer(@PathVariable("id") Long customerId, @RequestBody Customer customer){
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateCustomer(@PathVariable("id") Long customerId, @RequestBody @Valid Customer customer){
 
         Optional<Customer> checkCustomer = customerService.findById(customerId).map(_customer ->{
             _customer.setName(customer.getName());
