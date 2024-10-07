@@ -50,7 +50,7 @@ public class FeedbackController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateFeedback(@PathVariable("id") Long feedbackId, @RequestBody Feedback feedback){
+    public ResponseEntity<Object> updateFeedback(@PathVariable("id") Long feedbackId, @RequestBody @Valid Feedback feedback){
         Feedback checkFeedback = feedbackService.findById(feedbackId).map(_feedback->{
             _feedback.setDescription(feedback.getDescription());
             return feedbackService.save(_feedback);
