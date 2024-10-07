@@ -35,24 +35,19 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Object> saveCustomer(@RequestBody @Valid Customer customer){
-
         return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCustomer(@PathVariable("id") Long customerId, @RequestBody @Valid Customer customer){
 
-        Optional<Customer> checkCustomer = customerService.findById(customerId).map(_customer ->{
+        Customer checkCustomer = customerService.findById(customerId).map(_customer ->{
             _customer.setName(customer.getName());
             _customer.setEmail(customer.getEmail());
             _customer.setPhone(customer.getPhone());
 
             return customerService.save(_customer);
-        });
-
-        if(checkCustomer.isEmpty())
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
-
+        }).orElseThrow(()->new ResourceNotFoundException());    // alternative (method ref: .orElseThrow(ResourceNotFoundException::new);
 
         return new ResponseEntity<>(checkCustomer, HttpStatus.OK);
     }
@@ -60,14 +55,12 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCustomer (@PathVariable("id") Long customerId){
 
-        Optional<Customer> checkCustomer = customerService.findById(customerId).map(_customer->{
+        Customer checkCustomer = customerService.findById(customerId).map(_customer->{
             customerService.deleteById(_customer.getId());
             return _customer;
-        });
-        if(checkCustomer.isEmpty())
-            return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
+        }).orElseThrow(()->new ResourceNotFoundException());
 
-        String response = String.format("%s deleted successfully", checkCustomer.get().getName());
+        String response = String.format("%s deleted successfully", checkCustomer.getName());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

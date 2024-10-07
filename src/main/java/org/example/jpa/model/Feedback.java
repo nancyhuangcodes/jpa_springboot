@@ -2,6 +2,8 @@ package org.example.jpa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,7 +16,10 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column (nullable = false)
+    @NotBlank(message = "Feedback cannot be blank.")
+    @Size(min=3, message = "Feedback must be at least 3 characters")
+    @Size(max = 255, message ="Feedback must not be more than 255 characters")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -28,7 +28,8 @@ public class Customer {
     @Pattern(regexp = "^\\d{8}$", message = "Phone number must be 8-digits only.")
     private String phone;
 
-    public Customer() {     // create a new empty instance of Customer
+    // create a new empty instance of Customer
+    public Customer() {
     }
 
     public Customer(String name, String email, String phone) {

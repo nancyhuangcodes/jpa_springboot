@@ -20,7 +20,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         Map<String, String> response = new HashMap<>();
 
-        response.put("error", ex.getMessage()); // What is the value returned from getMessage()
+        response.put("error", ex.getMessage());                     // What is the value returned from getMessage()
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
